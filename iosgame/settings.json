@@ -49,6 +49,7 @@
 		
 		"max_speed": 10,
 		"health": 10,
-		"max_comets": 20
+		"max_comets": 20,
+		"no_collide": 1.0
 	}
 }

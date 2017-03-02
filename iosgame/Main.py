@@ -50,7 +50,7 @@ class Game(Scene):
 			
 		self.player.move()
 		self.pos = (self.center[0] - self.player.pos[0], self.center[1] - self.player.pos[1])
-		#self.check_comet_collisions()
+		self.check_comet_collisions()
 		self.check_laser_collisions()
 		self.move_objects()
 		self.move_lasers()
@@ -75,11 +75,19 @@ class Game(Scene):
 	def check_comet_collisions(self):
 		print(self.comets)
 		for comet in list(self.comets):
+			if comet.no_collide > self.t:
+				continue
+			else:
+				comet.no_collide = self.t + COMET_NO_COLLIDE
 			for other in list(self.comets):
 				if other == comet:
 					continue
-				
-		
+				if comet.frame.intersects(other.frame):
+					comet.rotation *= -1
+					comet.no_collide = COMET_NO_COLLIDE
+					other.rotaion *= -1
+					other.no_collide = COMET_NO_COLLIDE		
+					
 	def check_laser_collisions(self):
 		for laser in list(self.lasers):
 			if laser.dead:

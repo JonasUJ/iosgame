@@ -54,3 +54,4 @@ COMET_TEXTURES_TINY = [Texture(x) for x in _extract(COMET, 'textures', 'tiny')]
 COMET_MAX_SPEED = _extract(COMET, 'max_speed')
 COMET_HEALTH = _extract(COMET, 'health')
 COMET_MAX_COMETS = _extract(COMET, 'max_comets')
+COMET_NO_COLLIDE = _extract(COMET, 'no_collide')

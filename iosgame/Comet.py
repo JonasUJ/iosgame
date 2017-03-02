@@ -23,6 +23,7 @@ class Comet(SpriteNode):
 		self.label = LabelNode(str(self.position), parent=self)
 		self.label.rotation = 0-self.rotation
 		self.health = (COMET_HEALTH*size)**self.scale
+		self.no_collide = COMET_NO_COLLIDE
 		
 	@classmethod
 	def spawn_in(self, parent, area, outside_area, origin_pos, **kwargs):
