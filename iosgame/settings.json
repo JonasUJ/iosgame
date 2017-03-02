@@ -1,17 +1,26 @@
 {
 	"player": {
 		"texture": "spc:PlayerShip1Blue",
-		"laser_texture": "spc:LaserBlue6",
-		"laser_explosion": "spc:LaserBlue13",
-		"laser_damage": 10,
 		"speed": 15,
 		"turn_speed": 0.9,
-		"slowdown_rate": 0.98},
+		"slowdown_rate": 0.98,
+		"laser": {
+			"texture": "spc:LaserBlue6",
+			"explosion": "spc:LaserBlue13",
+			"damage": 10,
+			"time": 40,
+			"speed": 5
+		}
+	},
 	
 	"controller": {
 		"alpha": 0.4,
 		"texture": "assets/controller_back.PNG",
-		"joystick": "assets/joystick.PNG"},
+		"joystick": {
+			"texture": "assets/joystick.PNG",
+			"reset_speed": 0.2
+		}
+	},
 	
 	"comet": {
 		"textures": {
@@ -19,22 +28,27 @@
 				"spc:MeteorBrownBig1",
 				"spc:MeteorBrownBig2",
 				"spc:MeteorBrownBig3",
-				"spc:MeteorBrownBig4"],
+				"spc:MeteorBrownBig4"
+			],
 		
 			"med": [
 				"spc:MeteorBrownMed1",
-				"spc:MeteorBrownMed2"],
+				"spc:MeteorBrownMed2"
+			],
 			
 			"small": [
 				"spc:MeteorBrownSmall1",
-				"spc:MeteorBrownSmall2"],
+				"spc:MeteorBrownSmall2"
+			],
 				
 			"tiny": [
-			"spc:MeteorBrownTiny1",
-			"spc:MeteorBrownTiny2"]
+				"spc:MeteorBrownTiny1",
+				"spc:MeteorBrownTiny2"
+			]
 		},
 		
 		"max_speed": 10,
-		"health": 10
+		"health": 10,
+		"max_comets": 20
 	}
 }

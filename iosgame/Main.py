@@ -33,13 +33,13 @@ class Game(Scene):
 		self.frameno = (self.frameno + 1) if self.frameno != 60 else 1
 		if not self.frameno % 15 and self.frameno:
 			self.player.shoot()
-			if len(self.comets) < 20:
+			if len(self.comets) <= COMET_MAX_COMETS:
 				new_comet = Comet.spawn_in(
 					self,
 					self.spawn_area.frame, 
 					self.bounds, 
 					self.player.pos,
-					speed=randrange(1, 10))
+					speed=randrange(0, COMET_MAX_SPEED))
 				self.objects.append(new_comet)
 				self.comets.append(new_comet)
 			

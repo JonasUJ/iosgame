@@ -19,7 +19,7 @@ class Laser(SpriteNode):
 		self.damage = PLAYER_LASER_DAMAGE
 		self.dead = False
 		self.velocity = rotation_vector(self.rotation)*16+origin.velocity
-		self.counter = 20
+		self.counter = PLAYER_LASER_TIME
 		
 	def move(self):
 		if self.dead:

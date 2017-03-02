@@ -22,7 +22,7 @@ class Joystick(SpriteNode):
 				sin(atan2(self.touch_loc[0], self.touch_loc[1])+pi/2) * self.parent.radius)
 			
 	def reset(self):
-		self.run_action(Action.move_to(0, 0, .2))
+		self.run_action(Action.move_to(0, 0, CONTROLLER_JOYSTICK_RESET_SPEED))
 		
 	def update_movement(self):
 		dist = sqrt(self.position[0]**2 + self.position[1]**2)
