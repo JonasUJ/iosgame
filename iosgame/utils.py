@@ -28,7 +28,7 @@ with open('settings.json', 'r') as fp:
 PLAYER = _extract(loaded, 'player')
 PLAYER_TEXTURE = Texture(_extract(PLAYER, 'texture'))
 PLAYER_SPEED = _extract(PLAYER, 'speed')
-PLAYER_TURN_SPEED = _extract(PLAYER, 'trun_speed')
+PLAYER_TURN_SPEED = _extract(PLAYER, 'turn_speed')
 PLAYER_SLOWDOWN_RATE = _extract(PLAYER, 'slowdown_rate')
 
 PLAYER_LASER = _extract(PLAYER, 'laser')
