@@ -39,6 +39,7 @@ class Game(Scene):
 					self.spawn_area.frame, 
 					self.bounds, 
 					self.player.pos,
+					size='big',
 					speed=randrange(0, COMET_MAX_SPEED))
 				self.objects.append(new_comet)
 				self.comets.append(new_comet)
@@ -73,20 +74,18 @@ class Game(Scene):
 			laser.move()
 				
 	def check_comet_collisions(self):
-		print(self.comets)
 		for comet in list(self.comets):
 			if comet.no_collide > self.t:
 				continue
-			else:
-				comet.no_collide = self.t + COMET_NO_COLLIDE
 			for other in list(self.comets):
 				if other == comet:
 					continue
-				if comet.frame.intersects(other.frame):
+				if comet.frame.intersects(other.frame) and comet.frame.union(other.frame).size < \
+				comet.frame.size/1.4 + other.frame.size/1.4:
 					comet.rotation *= -1
-					comet.no_collide = COMET_NO_COLLIDE
-					other.rotaion *= -1
-					other.no_collide = COMET_NO_COLLIDE		
+					comet.no_collide = self.t + COMET_NO_COLLIDE
+					other.rotation *= -1
+					other.no_collide = self.t + COMET_NO_COLLIDE		
 					
 	def check_laser_collisions(self):
 		for laser in list(self.lasers):
