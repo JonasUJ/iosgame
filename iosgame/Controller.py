@@ -5,7 +5,7 @@ from utils import *
 
 class Joystick(SpriteNode):
 	def __init__(self, **kwargs):
-		SpriteNode.__init__(self, CONTROLLER_JOYSTICK, **kwargs)
+		SpriteNode.__init__(self, CONTROLLER_JOYSTICK_TEXTURE, **kwargs)
 		self.alpha = self.parent.alpha
 		self.movement = (0, 0, 0, 0)
 		self.touch_loc = (0, 0)
