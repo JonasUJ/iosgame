@@ -1,7 +1,7 @@
 from scene import *
 from utils import *
 from random import random, randrange
-from math import pi, cos, sin
+from math import pi, cos, sin, sqrt
 
 
 class Comet(SpriteNode):
@@ -21,7 +21,8 @@ class Comet(SpriteNode):
 			2: COMET_SIZES_SMALL,
 			1: COMET_SIZES_TINY}[self.comet_size]
 
-		tex, self.radius = self.looks[randrange(0, len(self.looks))]
+		tex, self.diameter = self.looks[randrange(0, len(self.looks))]
+		self.radius = self.diameter/2
 
 		SpriteNode.__init__(self, tex, **kwargs)
 
@@ -31,6 +32,13 @@ class Comet(SpriteNode):
 		self.label.rotation = 0-self.rotation
 		self.health = (COMET_HEALTH*self.comet_size)**self.scale
 		self.no_collide = COMET_NO_COLLIDE
+
+	def collidesWithComet(self, other):
+		distance = sqrt(((self.position.x - other.position.x) * (self.position.x - other.position.x)) + ((self.position.y - other.position.y) * (self.position.y - other.position.y)))
+		if distance < 0: 
+			distance *= -1
+
+		return distance <= self.radius + other.radius
 		
 	@classmethod
 	def spawn_in(self, parent, area, outside_area, origin_pos, **kwargs):

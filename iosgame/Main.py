@@ -80,8 +80,7 @@ class Game(Scene):
 			for other in list(self.comets):
 				if other == comet:
 					continue
-				if comet.frame.intersects(other.frame) and comet.frame.union(other.frame).size < \
-				comet.frame.size/1.4 + other.frame.size/1.4:
+				if comet.frame.intersects(other.frame) and comet.collidesWithComet(other) # and comet.frame.union(other.frame).size < comet.frame.size/1.4 + other.frame.size/1.4:
 					comet.rotation *= -1
 					comet.no_collide = self.t + COMET_NO_COLLIDE
 					other.rotation *= -1
