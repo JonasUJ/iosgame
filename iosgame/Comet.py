@@ -28,7 +28,8 @@ class Comet(SpriteNode):
 
 		self.pos = self.position
 		self.rotation = random()*2*pi
-		self.label = LabelNode(str(self.position), parent=self)
+		self.direction = self.rotation
+		self.label = LabelNode('', parent=self)
 		self.label.rotation = 0-self.rotation
 		self.health = (COMET_HEALTH*self.comet_size)**self.scale
 		self.no_collide = COMET_NO_COLLIDE

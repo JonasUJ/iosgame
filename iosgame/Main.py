@@ -66,8 +66,8 @@ class Game(Scene):
 					self.objects.remove(obj)
 					self.comets.remove(obj)
 					obj.remove_from_parent()
-				obj.pos += rotation_vector(obj.rotation) * obj.speed
-				obj.label.text = str(obj.health)
+				obj.pos += rotation_vector(obj.direction) * obj.speed
+				#obj.label.text = str(obj.health)
 				
 	def move_lasers(self):
 		for laser in self.lasers:
@@ -81,10 +81,8 @@ class Game(Scene):
 				if other == comet:
 					continue
 				if comet.frame.intersects(other.frame) and comet.collides_with_comet(other):
-					x1 = comet.x
-					x2 = other.x
-					y1 = comet.y
-					y2 = other.y
+					x1, y1 = comet.position
+					x2, y2 = other.position
 					r1 = comet.radius
 					r2 = other.radius
 					
@@ -92,18 +90,21 @@ class Game(Scene):
 			
 					mass1 = comet.radius
 					mass2 = other.radius
-					velX1, velY1 = rotation_vector(comet.rotaion) * comet.speed
-					velX2, velY2 = rotaion_vector(other.rotaion) * other.speed
+					velX1, velY1 = rotation_vector(comet.direction) * comet.speed
+					velX2, velY2 = rotation_vector(other.direction) * other.speed
 					
 					newVelX1 = (velX1 * (mass1 - mass2) + (2 * mass2 * velX2)) / (mass1 + mass2)
 					newVelX2 = (velX2 * (mass2 - mass1) + (2 * mass1 * velX1)) / (mass1 + mass2)
 					newVelY1 = (velY1 * (mass1 - mass2) + (2 * mass2 * velY2)) / (mass1 + mass2)
 					newVelY2 = (velY2 * (mass2 - mass1) + (2 * mass1 * velY1)) / (mass1 + mass2)
-                
+					
 
-					comet.rotation = atan2(newVelX1, newVelY1)
+					comet.direction = -atan2(newVelX1, newVelY1)
+					comet.speed = abs(Vector2(newVelX1, newVelY1))
 					comet.no_collide = self.t + COMET_NO_COLLIDE
-					other.rotation = atan2(newVelX2, newVelY2)
+					
+					other.direction = -atan2(newVelX2, newVelY2)
+					other.speed = abs(Vector2(newVelX1, newVelY1))
 					other.no_collide = self.t + COMET_NO_COLLIDE		
 					
 	def check_laser_collisions(self):
