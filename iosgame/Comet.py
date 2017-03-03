@@ -16,12 +16,12 @@ class Comet(SpriteNode):
 				'tiny': 1}[self.comet_size]
 
 		self.looks = {
-			4: COMET_SIZES_BIG[0],
-			3: COMET_SIZES_MED[0},
-			2: COMET_SIZES_SMALL[0],
-			1: COMET_SIZES_TINY[0]}[self.comet_size]
+			4: COMET_SIZES_BIG,
+			3: COMET_SIZES_MED,
+			2: COMET_SIZES_SMALL,
+			1: COMET_SIZES_TINY}[self.comet_size]
 
-		tex, self.radius = randrange(0, len(self.looks)-1)
+		tex, self.radius = self.looks[randrange(0, len(self.looks))]
 
 		SpriteNode.__init__(self, tex, **kwargs)
 
@@ -29,7 +29,7 @@ class Comet(SpriteNode):
 		self.rotation = random()*2*pi
 		self.label = LabelNode(str(self.position), parent=self)
 		self.label.rotation = 0-self.rotation
-		self.health = (COMET_HEALTH*size)**self.scale
+		self.health = (COMET_HEALTH*self.comet_size)**self.scale
 		self.no_collide = COMET_NO_COLLIDE
 		
 	@classmethod
