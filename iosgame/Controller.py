@@ -1,5 +1,5 @@
 from scene import *
-from math import pi, cos, sin, sqrt, atan2, acos, atan
+from math import pi, cos, sin, sqrt, atan2, atan
 from ui import Image
 from utils import *
 

@@ -2,7 +2,7 @@ from scene import *
 from Player import Player
 from Controller import Controller
 from Comet import Comet
-from math import pi, atan2, cos, sin
+from math import pi, cos, sin, atan2
 from utils import *
 from random import randrange
 from ui import Path
@@ -80,10 +80,30 @@ class Game(Scene):
 			for other in list(self.comets):
 				if other == comet:
 					continue
-				if comet.frame.intersects(other.frame) and comet.collidesWithComet(other):
-					comet.rotation *= -1
+				if comet.frame.intersects(other.frame) and comet.collides_with_comet(other):
+					x1 = comet.x
+					x2 = other.x
+					y1 = comet.y
+					y2 = other.y
+					r1 = comet.radius
+					r2 = other.radius
+					
+					collisionPoint = Point( (x1 * r2 + x2 * r1) / (r1 + r2), (y1 * r2 + y2 * r1) / (r1 + r2) )
+			
+					mass1 = comet.radius
+					mass2 = other.radius
+					velX1, velY1 = rotation_vector(comet.rotaion) * comet.speed
+					velX2, velY2 = rotaion_vector(other.rotaion) * other.speed
+					
+					newVelX1 = (velX1 * (mass1 - mass2) + (2 * mass2 * velX2)) / (mass1 + mass2)
+					newVelX2 = (velX2 * (mass2 - mass1) + (2 * mass1 * velX1)) / (mass1 + mass2)
+					newVelY1 = (velY1 * (mass1 - mass2) + (2 * mass2 * velY2)) / (mass1 + mass2)
+					newVelY2 = (velY2 * (mass2 - mass1) + (2 * mass1 * velY1)) / (mass1 + mass2)
+                
+
+					comet.rotation = atan2(newVelX1, newVelY1)
 					comet.no_collide = self.t + COMET_NO_COLLIDE
-					other.rotation *= -1
+					other.rotation = atan2(newVelX2, newVelY2)
 					other.no_collide = self.t + COMET_NO_COLLIDE		
 					
 	def check_laser_collisions(self):

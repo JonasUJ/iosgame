@@ -1,5 +1,5 @@
 from scene import *
-from math import pi, cos, sin, atan2
+from math import pi, cos, sin
 from utils import *
 from ui import Path
 from Laser import Laser
