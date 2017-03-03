@@ -23,30 +23,30 @@
 	},
 	
 	"comet": {
-		"textures": {
+		"sizes": {
 			"big": [
-				"spc:MeteorBrownBig1",
-				"spc:MeteorBrownBig2",
-				"spc:MeteorBrownBig3",
-				"spc:MeteorBrownBig4"
+				["spc:MeteorBrownBig1", 92],
+				["spc:MeteorBrownBig2", 109],
+				["spc:MeteorBrownBig3", 85],
+				["spc:MeteorBrownBig4", 97]
 			],
-		
+			
 			"med": [
-				"spc:MeteorBrownMed1",
-				"spc:MeteorBrownMed2"
+				["spc:MeteorBrownMed1", 43],
+				["spc:MeteorBrownMed2", 42]
 			],
 			
 			"small": [
-				"spc:MeteorBrownSmall1",
-				"spc:MeteorBrownSmall2"
+				["spc:MeteorBrownSmall1", 28],
+				["spc:MeteorBrownSmall2", 27]
 			],
 				
 			"tiny": [
-				"spc:MeteorBrownTiny1",
-				"spc:MeteorBrownTiny2"
+				["spc:MeteorBrownTiny1", 18],
+				["spc:MeteorBrownTiny2", 15]
 			]
 		},
-		
+	
 		"max_speed": 10,
 		"health": 10,
 		"max_comets": 20,

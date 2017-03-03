@@ -4,8 +4,15 @@ from math import pi, cos, sin
 try:
 	from scene import Texture, Vector2
 except ImportError:
-	def Texture(tex):
-		return tex
+	class Texture:
+		def __init__(self, tex):
+			self.tex = tex
+
+		def __repr__(self):
+			return 'Texture(\'{}\')'.format(self.tex)
+		
+		def __str__(self):
+			return self.__repr__()
 
 def cmp(a, b):
 	return (a>b) - (a<b)
@@ -22,8 +29,15 @@ def _extract(load, *args):
 			load = load.get(arg)
 	return load
 
-with open('settings.json', 'r') as fp:
-	loaded = json.loads(fp.read())
+try:
+	with open('settings.json', 'r') as fp:
+		loaded = json.loads(fp.read())
+except FileNotFoundError:
+	import os
+	dir_path = os.path.dirname(os.path.realpath(__file__))
+	os.chdir(dir_path)
+	with open('settings.json', 'r') as fp:
+		loaded = json.loads(fp.read())
 	
 PLAYER = _extract(loaded, 'player')
 PLAYER_TEXTURE = Texture(_extract(PLAYER, 'texture'))
@@ -47,10 +61,10 @@ CONTROLLER_JOYSTICK_TEXTURE = Texture(_extract(CONTROLLER_JOYSTICK, 'texture'))
 CONTROLLER_JOYSTICK_RESET_SPEED = _extract(CONTROLLER_JOYSTICK, 'reset_speed')
 
 COMET = _extract(loaded, 'comet')
-COMET_TEXTURES_BIG = [Texture(x) for x in _extract(COMET, 'textures', 'big')]
-COMET_TEXTURES_MED = [Texture(x) for x in _extract(COMET, 'textures', 'med')]
-COMET_TEXTURES_SMALL = [Texture(x) for x in _extract(COMET, 'textures', 'small')]
-COMET_TEXTURES_TINY = [Texture(x) for x in _extract(COMET, 'textures', 'tiny')]
+COMET_SIZES_BIG = [(Texture(x[0]), x[1]) for x in _extract(COMET, 'sizes', 'big')]
+COMET_SIZES_MED = [(Texture(x[0]), x[1]) for x in _extract(COMET, 'sizes', 'med')]
+COMET_SIZES_SMALL = [(Texture(x[0]), x[1]) for x in _extract(COMET, 'sizes', 'small')]
+COMET_SIZES_TINY = [(Texture(x[0]), x[1]) for x in _extract(COMET, 'sizes', 'tiny')]
 COMET_MAX_SPEED = _extract(COMET, 'max_speed')
 COMET_HEALTH = _extract(COMET, 'health')
 COMET_MAX_COMETS = _extract(COMET, 'max_comets')

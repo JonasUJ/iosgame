@@ -1,23 +1,30 @@
 from scene import *
 from utils import *
-from random import choice, random,randrange
+from random import random, randrange
 from math import pi, cos, sin
 
 
 class Comet(SpriteNode):
-	def __init__(self, size='big', **kwargs):
-		if isinstance(size, str):
-			 size = {
+	def __init__(self, comet_size='big', **kwargs):
+		self.comet_size = comet_size
+
+		if isinstance(self.comet_size, str):
+			 self.comet_size = {
 				'big': 4,
 				'med': 3,
 				'small': 2,
-				'tiny': 1}[size]
+				'tiny': 1}[self.comet_size]
+
 		self.looks = {
-			4: COMET_TEXTURES_BIG,
-			3: COMET_TEXTURES_MED,
-			2: COMET_TEXTURES_SMALL,
-			1: COMET_TEXTURES_TINY}[size]
-		SpriteNode.__init__(self, choice(self.looks), **kwargs)
+			4: COMET_SIZES_BIG[0],
+			3: COMET_SIZES_MED[0},
+			2: COMET_SIZES_SMALL[0],
+			1: COMET_SIZES_TINY[0]}[self.comet_size]
+
+		tex, self.radius = randrange(0, len(self.looks)-1)
+
+		SpriteNode.__init__(self, tex, **kwargs)
+
 		self.pos = self.position
 		self.rotation = random()*2*pi
 		self.label = LabelNode(str(self.position), parent=self)

@@ -39,7 +39,7 @@ class Game(Scene):
 					self.spawn_area.frame, 
 					self.bounds, 
 					self.player.pos,
-					size='big',
+					comet_size='big',
 					speed=randrange(0, COMET_MAX_SPEED))
 				self.objects.append(new_comet)
 				self.comets.append(new_comet)
