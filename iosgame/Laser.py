@@ -52,7 +52,7 @@ class Sequence:
 				self.parent.objects.append(laser)
 				self.parent.lasers.append(laser)
 
-			self.progress = (self.progress + 1) if self.progress != len(self.sequence) else 0
+			self.progress = (self.progress + 1) if self.progress != len(self.sequence)-1 else 0
 			self.t = self.parent.t	
 
 

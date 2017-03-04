@@ -6,7 +6,7 @@ from math import pi, cos, sin, atan2
 from utils import *
 from random import random, randrange
 from ui import Path
-from Laser import Laser
+from Laser import *
 
 class Game(Scene):
 	
@@ -20,6 +20,12 @@ class Game(Scene):
 		self.lasers = list()
 		self.comets = list()
 		self.pos = (.0, .0)
+		
+		self.player_sequence = Sequence(
+			[Shot(angle_offset=0.5), Shot(angle_offset=-0.5)], 
+			[Shot(angle_offset=3), Shot(angle_offset=-3)],
+			[Shot(x_offset=40), Shot(y_offset=100)], 
+			origin=self.player, parent=self, delay=0.1)
 
 		self.spawn_area = ShapeNode(
 			Path.rect(*self.bounds),
@@ -32,7 +38,8 @@ class Game(Scene):
 		self.controller.joystick.update_movement()
 		self.frameno = (self.frameno + 1) if self.frameno != 60 else 1
 		if not self.frameno % 15 and self.frameno:
-			self.player.shoot()
+			#self.player.shoot()
+			self.player_sequence.shoot()
 			if len(self.comets) <= COMET_MAX_COMETS:
 				new_comet = Comet.spawn_in(
 					self,
