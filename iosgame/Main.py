@@ -61,7 +61,7 @@ class Game(Scene):
 	def move_objects(self):
 		for obj in list(self.objects):
 			obj.position = (obj.pos[0] - self.player.pos[0], obj.pos[1] - self.player.pos[1])
-			if isinstance(obj, Comet):
+			if isinstance(obj, Comet): 
 				if max([abs(x+self.size.w/2) for x in obj.position]) > self.size.w*2:
 					self.objects.remove(obj)
 					self.comets.remove(obj)
@@ -98,11 +98,12 @@ class Game(Scene):
 					newVelY1 = (velY1 * (mass1 - mass2) + (2 * mass2 * velY2)) / (mass1 + mass2)
 					newVelY2 = (velY2 * (mass2 - mass1) + (2 * mass1 * velY1)) / (mass1 + mass2)
 					
-
+					comet.position += Vector2(newVelX1, newVelY1) 
 					comet.direction = -atan2(newVelX1, newVelY1)
 					comet.speed = abs(Vector2(newVelX1, newVelY1))
 					comet.no_collide = self.t + COMET_NO_COLLIDE
 					
+					other.position += Vector2(newVelX2, newVelY2)
 					other.direction = -atan2(newVelX2, newVelY2)
 					other.speed = abs(Vector2(newVelX1, newVelY1))
 					other.no_collide = self.t + COMET_NO_COLLIDE		
