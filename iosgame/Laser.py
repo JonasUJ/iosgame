@@ -33,23 +33,32 @@ class Laser(SpriteNode):
 		else:
 			self.pos = self.pos + self.velocity
 		self.counter -= 1
-		'''
-		self.move_by = (
-			self.distance*cos(self.rotation+pi/2),
-			self.distance*sin(self.rotation+pi/2))
-		self.run_action(
-			Action.sequence([
-				Action.move_by(*self.move_by),
-				Action.call(lambda: setattr(self, 'alpha', 0)),
-				Action.call(lambda: setattr(self, 'pos', (self.origin.pos[0] + self.pos[0] + self.move_by[0], self.origin.pos[1] + self.pos[1] + self.move_by[1]))),
-				Action.call(self._explode),
-				Action.wait(.2),
-				Action.call(lambda: setattr(self, 'dead', True)),
-				Action.remove()]))
-		
-				
-	def _explode(self):
-		self.texture = PLAYER_LASER_EXPLOSION
-		self.alpha = 1
-		
-			'''
+
+
+class Sequence:
+
+	def __init__(self, *args, delay=0.4, parent=None, origin=None):
+		self.t = 0.0
+		self.delay = delay
+		self.parent = parent
+		self.origin = origin
+		self.sequence = args
+		self.progress = 0
+	
+	def shoot(self):
+		if self.t + self.delay <= self.parent.t:
+			for shot in self.sequence[self.progress]:
+				laser = Laser(self.origin, x_offset=shot.x_offset, y_offset=shot.y_offset, angle_offset=shot.angle_offset, parent=self.parent)
+				self.parent.objects.append(laser)
+				self.parent.lasers.append(laser)
+
+			self.progress = (self.progress + 1) if self.progress != len(self.sequence) else 0
+			self.t = self.parent.t	
+
+
+class Shot:
+
+	def __init__(self, x_offset=0, y_offset=0, angle_offset=0):
+		self.x_offset = x_offset
+		self.y_offset = y_offset
+		self.angle_offset = angle_offset
