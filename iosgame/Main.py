@@ -4,7 +4,7 @@ from Controller import Controller
 from Comet import Comet
 from math import pi, cos, sin, atan2
 from utils import *
-from random import randrange
+from random import random, randrange
 from ui import Path
 from Laser import Laser
 
@@ -40,6 +40,7 @@ class Game(Scene):
 					self.bounds, 
 					self.player.pos,
 					comet_size='big',
+					scale=max(1, random()*2),
 					speed=randrange(0, COMET_MAX_SPEED))
 				self.objects.append(new_comet)
 				self.comets.append(new_comet)
@@ -75,8 +76,6 @@ class Game(Scene):
 				
 	def check_comet_collisions(self):
 		for comet in list(self.comets):
-			if comet.no_collide > self.t:
-				continue
 			for other in list(self.comets):
 				if other == comet:
 					continue
@@ -88,25 +87,25 @@ class Game(Scene):
 					
 					collisionPoint = Point( (x1 * r2 + x2 * r1) / (r1 + r2), (y1 * r2 + y2 * r1) / (r1 + r2) )
 			
-					mass1 = comet.radius
-					mass2 = other.radius
+					mass1 = comet.mass
+					mass2 = other.mass
 					velX1, velY1 = rotation_vector(comet.direction) * comet.speed
 					velX2, velY2 = rotation_vector(other.direction) * other.speed
 					
-					newVelX1 = (velX1 * (mass1 - mass2) + (2 * mass2 * velX2)) / (mass1 + mass2)
-					newVelX2 = (velX2 * (mass2 - mass1) + (2 * mass1 * velX1)) / (mass1 + mass2)
-					newVelY1 = (velY1 * (mass1 - mass2) + (2 * mass2 * velY2)) / (mass1 + mass2)
-					newVelY2 = (velY2 * (mass2 - mass1) + (2 * mass1 * velY1)) / (mass1 + mass2)
+					newVelX1 = (velX1 * (mass1 - mass2) + (2 * mass2 * velX2)) / (mass1 + mass2) / 1.1
+					newVelX2 = (velX2 * (mass2 - mass1) + (2 * mass1 * velX1)) / (mass1 + mass2) / 1.1
+					newVelY1 = (velY1 * (mass1 - mass2) + (2 * mass2 * velY2)) / (mass1 + mass2) / 1.1
+					newVelY2 = (velY2 * (mass2 - mass1) + (2 * mass1 * velY1)) / (mass1 + mass2) / 1.1
 					
 					comet.position += Vector2(newVelX1, newVelY1) 
+					comet.pos += Vector2(newVelX1, newVelY1) 
 					comet.direction = -atan2(newVelX1, newVelY1)
 					comet.speed = abs(Vector2(newVelX1, newVelY1))
-					comet.no_collide = self.t + COMET_NO_COLLIDE
 					
 					other.position += Vector2(newVelX2, newVelY2)
+					other.pos += Vector2(newVelX2, newVelY2)
 					other.direction = -atan2(newVelX2, newVelY2)
-					other.speed = abs(Vector2(newVelX1, newVelY1))
-					other.no_collide = self.t + COMET_NO_COLLIDE		
+					other.speed = abs(Vector2(newVelX1, newVelY1))	
 					
 	def check_laser_collisions(self):
 		for laser in list(self.lasers):

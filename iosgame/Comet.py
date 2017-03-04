@@ -22,10 +22,13 @@ class Comet(SpriteNode):
 			1: COMET_SIZES_TINY}[self.comet_size]
 
 		tex, self.diameter = self.looks[randrange(0, len(self.looks))]
-		self.radius = self.diameter/2
 
 		SpriteNode.__init__(self, tex, **kwargs)
 
+		self.diameter *= self.scale
+		self.radius = self.diameter/2
+		self.mass = self.scale * self.radius
+		self.speed /= self.scale
 		self.pos = self.position
 		self.rotation = random()*2*pi
 		self.direction = self.rotation
