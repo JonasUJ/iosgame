@@ -86,7 +86,7 @@ class Game(Scene):
 			for other in list(self.comets):
 				if other == comet:
 					continue
-				if comet.frame.intersects(other.frame) and comet.collides_with_comet(other):
+				if comet.frame.intersects(other.frame) and comet.collides_with_other(other):
 					x1, y1 = comet.position
 					x2, y2 = other.position
 					r1 = comet.radius
@@ -121,7 +121,7 @@ class Game(Scene):
 			for obj in self.objects:
 				if isinstance(obj, Laser):
 					continue
-				elif isinstance(obj, Comet) and laser.frame.intersects(obj.frame):
+				elif isinstance(obj, Comet) and laser.frame.intersects(obj.frame) and obj.collides_with_other(laser):
 					laser.counter = 0
 					laser.z_position = obj.z_position+.1
 					obj.health -= laser.damage

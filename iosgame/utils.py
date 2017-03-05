@@ -51,6 +51,7 @@ PLAYER_LASER_EXPLOSION = Texture(_extract(PLAYER_LASER, 'explosion'))
 PLAYER_LASER_DAMAGE = _extract(PLAYER_LASER, 'damage')
 PLAYER_LASER_TIME = _extract(PLAYER_LASER, 'time')
 PLAYER_LASER_SPEED = _extract(PLAYER_LASER, 'speed')
+PLAYER_LASER_RADIUS = _extract(PLAYER_LASER, 'radius')
 
 CONTROLLER = _extract(loaded, 'controller')
 CONTROLLER_TEXTURE = Texture(_extract(CONTROLLER, 'texture'))

@@ -35,9 +35,9 @@ class Comet(SpriteNode):
 		self.label = LabelNode('', parent=self)
 		self.label.rotation = 0-self.rotation
 		self.health = (COMET_HEALTH*self.comet_size)**self.scale
-		self.no_collide = COMET_NO_COLLIDE
+		self.no_collide = collides_with_other
 
-	def collides_with_comet(self, other):
+	def collides_with_other(self, other):
 		distance = sqrt(((self.position.x - other.position.x) * (self.position.x - other.position.x)) + ((self.position.y - other.position.y) * (self.position.y - other.position.y)))
 		if distance < 0: 
 			distance *= -1
