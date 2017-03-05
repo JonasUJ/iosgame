@@ -99,10 +99,10 @@ class Game(Scene):
 					velX1, velY1 = rotation_vector(comet.direction) * comet.speed
 					velX2, velY2 = rotation_vector(other.direction) * other.speed
 					
-					newVelX1 = (velX1 * (mass1 - mass2) + (2 * mass2 * velX2)) / (mass1 + mass2) / 1.1
-					newVelX2 = (velX2 * (mass2 - mass1) + (2 * mass1 * velX1)) / (mass1 + mass2) / 1.1
-					newVelY1 = (velY1 * (mass1 - mass2) + (2 * mass2 * velY2)) / (mass1 + mass2) / 1.1
-					newVelY2 = (velY2 * (mass2 - mass1) + (2 * mass1 * velY1)) / (mass1 + mass2) / 1.1
+					newVelX1 = (velX1 * (mass1 - mass2) + (2 * mass2 * velX2)) / (mass1 + mass2)
+					newVelX2 = (velX2 * (mass2 - mass1) + (2 * mass1 * velX1)) / (mass1 + mass2)
+					newVelY1 = (velY1 * (mass1 - mass2) + (2 * mass2 * velY2)) / (mass1 + mass2)
+					newVelY2 = (velY2 * (mass2 - mass1) + (2 * mass1 * velY1)) / (mass1 + mass2)
 					
 					comet.position += Vector2(newVelX1, newVelY1) 
 					comet.pos += Vector2(newVelX1, newVelY1) 
