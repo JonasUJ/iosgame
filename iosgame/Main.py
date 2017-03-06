@@ -38,7 +38,6 @@ class Game(Scene):
 		self.controller.joystick.update_movement()
 		self.frameno = (self.frameno + 1) if self.frameno != 60 else 1
 		if not self.frameno % 15 and self.frameno:
-			#self.player.shoot()
 			self.player_sequence.shoot()
 			if len(self.comets) <= COMET_MAX_COMETS:
 				new_comet = Comet.spawn_in(
@@ -46,6 +45,7 @@ class Game(Scene):
 					self.spawn_area.frame, 
 					self.bounds, 
 					self.player.pos,
+					self.objects,
 					comet_size='big',
 					scale=max(1, random()*2),
 					speed=randrange(0, COMET_MAX_SPEED))
@@ -103,6 +103,9 @@ class Game(Scene):
 					newVelX2 = (velX2 * (mass2 - mass1) + (2 * mass1 * velX1)) / (mass1 + mass2)
 					newVelY1 = (velY1 * (mass1 - mass2) + (2 * mass2 * velY2)) / (mass1 + mass2)
 					newVelY2 = (velY2 * (mass2 - mass1) + (2 * mass1 * velY1)) / (mass1 + mass2)
+
+					comet.health -= other.mass * other.speed
+					print(other.mass * other.speed)
 					
 					comet.position += Vector2(newVelX1, newVelY1) 
 					comet.pos += Vector2(newVelX1, newVelY1) 

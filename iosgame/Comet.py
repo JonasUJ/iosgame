@@ -45,9 +45,9 @@ class Comet(SpriteNode):
 		return distance <= self.radius + other.radius
 		
 	@classmethod
-	def spawn_in(self, parent, area, outside_area, origin_pos, **kwargs):
+	def spawn_in(self, parent, area, outside_area, origin_pos, colliders, **kwargs):
 		pos = Point(*(outside_area.size/2))
-		while outside_area.contains_point(pos):
+		while outside_area.contains_point(pos) and True in [x.frame.contains(pos) for x in colliders]:
 			pos = (randrange(area.x, area.size.w), randrange(area.y, area.size.h))
 
 		comet = Comet(position=pos, parent=parent, **kwargs)
