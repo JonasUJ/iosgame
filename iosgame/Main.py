@@ -22,9 +22,7 @@ class Game(Scene):
 		self.pos = (.0, .0)
 		
 		self.player_sequence = Sequence(
-			[Shot(angle_offset=0.5), Shot(angle_offset=-0.5)], 
-			[Shot(angle_offset=3), Shot(angle_offset=-3)],
-			[Shot(x_offset=40), Shot(y_offset=100)], 
+			[Shot(x_offset=40), Shot(x_offset=-40), Shot(y_offset=80)], 
 			origin=self.player, parent=self, delay=0.1)
 
 		self.spawn_area = ShapeNode(
@@ -45,7 +43,7 @@ class Game(Scene):
 					self.spawn_area.frame, 
 					self.bounds, 
 					self.player.pos,
-					self.objects,
+					self.comets,
 					comet_size='big',
 					scale=max(1, random()*2),
 					speed=randrange(0, COMET_MAX_SPEED))
@@ -104,8 +102,8 @@ class Game(Scene):
 					newVelY1 = (velY1 * (mass1 - mass2) + (2 * mass2 * velY2)) / (mass1 + mass2)
 					newVelY2 = (velY2 * (mass2 - mass1) + (2 * mass1 * velY1)) / (mass1 + mass2)
 
-					comet.health -= other.mass * other.speed
-					print(other.mass * other.speed)
+					comet.health -= other.mass * other.speed / 100
+					other.health -= comet.mass * comet.speed / 100
 					
 					comet.position += Vector2(newVelX1, newVelY1) 
 					comet.pos += Vector2(newVelX1, newVelY1) 
@@ -121,13 +119,11 @@ class Game(Scene):
 		for laser in list(self.lasers):
 			if laser.dead:
 				continue
-			for obj in self.objects:
-				if isinstance(obj, Laser):
-					continue
-				elif isinstance(obj, Comet) and laser.frame.intersects(obj.frame) and obj.collides_with_other(laser):
+			for comet in self.comets:
+				if laser.frame.intersects(comet.frame) and comet.collides_with_other(laser):
 					laser.counter = 0
-					laser.z_position = obj.z_position+.1
-					obj.health -= laser.damage
+					laser.z_position = comet.z_position+.1
+					comet.health -= laser.damage
 	
 	def touch_began(self, touch):
 		if touch.location in self.controller.frame:
