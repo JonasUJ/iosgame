@@ -9,8 +9,13 @@ from ui import Path
 from Laser import *
 
 class Game(Scene):
+	'''
+	The Scene object where the gameplay is handled
+	'''
 	
 	def setup(self):
+		'''Called to initialize the game'''
+
 		self.center = (self.size.w/2, self.size.h/2)
 		self.player = Player(parent=self, speed=PLAYER_SPEED)
 		self.controller = Controller(padding=40, scale=1.2, parent=self)
@@ -34,7 +39,11 @@ class Game(Scene):
 			position=self.size/2)
 		
 	def update(self):
+		'''Called, preferably, 60 times a second'''
+
 		self.controller.joystick.update_movement()
+
+		# temp frame count
 		self.frameno = (self.frameno + 1) if self.frameno != 60 else 1
 		if not self.frameno % 15 and self.frameno:
 			self.player_sequence.shoot()
@@ -62,10 +71,14 @@ class Game(Scene):
 		self.check_laser_collisions()
 		self.move_objects()
 		self.move_lasers()
+
+		# temp debugging
 		self.player.label.text = str(self.player.velocity)
 		self.player.label.rotation = 0-self.player.rotation
 
 	def move_objects(self):
+		'''Moves every Node in self.objects to give the impression self.player moved'''
+
 		for obj in list(self.objects):
 			obj.position = (obj.pos[0] - self.player.pos[0], obj.pos[1] - self.player.pos[1])
 			if isinstance(obj, Comet): 
@@ -76,10 +89,14 @@ class Game(Scene):
 				obj.pos += rotation_vector(obj.direction) * obj.speed
 				
 	def move_lasers(self):
+		'''Calls laser.move() on all objects in self.lasers'''
+
 		for laser in self.lasers:
 			laser.move()
 				
 	def check_comet_collisions(self):
+		'''Checks and handles Comet to Comet collisions'''
+
 		for comet in list(self.comets):
 			for other in list(self.comets):
 				if other == comet:
@@ -119,6 +136,8 @@ class Game(Scene):
 					other.check_health()
 					
 	def check_laser_collisions(self):
+		'''Checks and handles Laser to Comet collisions '''
+
 		for laser in list(self.lasers):
 			if laser.dead:
 				continue
@@ -130,6 +149,8 @@ class Game(Scene):
 					comet.check_health()
 	
 	def touch_began(self, touch):
+		'''Called when a touch is initiated'''
+
 		if touch.location in self.controller.frame:
 			self.controller.touch_id = touch.touch_id
 			self.controller.run_action(Action.fade_to(1, .2))
@@ -138,14 +159,20 @@ class Game(Scene):
 			self.controller.joystick.move_to(touch.location)
 		
 	def touch_moved(self, touch):
+		'''Called when a touch moved'''
+
 		if touch.touch_id == self.controller.touch_id:
 			self.controller.joystick.move_to(touch.location)
 		
 	def touch_ended(self, touch):
+		'''Called when a touch ended'''
+
 		if touch.touch_id == self.controller.touch_id:
 			self.controller.joystick.reset()
 			self.controller.run_action(Action.fade_to(.4, .2))
 		
 		
 if __name__ == '__main__':
+	 
+	# Run the game
 	run(Game(), LANDSCAPE, show_fps=True)

@@ -5,6 +5,16 @@ from math import pi, cos, sin, sqrt
 
 
 class Comet(SpriteNode):
+	'''
+	Represents a comet in the game
+	Comets are assigned a random texture, depending on *comet_size*, during __init__ 
+
+	Parameters:
+	----------
+	comet_size : str, int
+		The size of the comet
+	'''
+
 	def __init__(self, comet_size='big', **kwargs):
 		self.comet_size = comet_size
 
@@ -38,12 +48,20 @@ class Comet(SpriteNode):
 		self.no_collide = 0.0
 
 	def collides_with_other(self, other):
-		distance = sqrt(((self.position.x - other.position.x) * (self.position.x - other.position.x)) + ((self.position.y - other.position.y) * (self.position.y - other.position.y)))
-		
+		'''
+		True if self is colliding with `other` otherwise False
+		Collision is determined using the distance between self and `other` and their radii
+		Raises AttributeError if `other` does not have a radius
+		'''
+		distance = sqrt(((self.position.x - other.position.x) * (self.position.x - other.position.x)) + ((self.position.y - other.position.y) * (self.position.y - other.position.y)))		
 		distance *= cmp(distance, 0)
 		return distance <= self.radius + other.radius
 		
 	def check_health(self):
+		'''
+		Checks is self.health <= 0
+		If True, spawns new, smaller, comets
+		'''
 		if self.health <= 0 and self.parent:
 			new_comets = list()
 			for i in range(self.comet_size):
@@ -71,6 +89,11 @@ class Comet(SpriteNode):
 		
 	@classmethod
 	def spawn_in(self, parent, area, outside_area, origin_pos, collidables, **kwargs):
+		'''
+		Returns a Comet(parent=`parent`, **kwargs)
+		The comet is not intersecting `outside_area` and is contained in `area`
+		The comet is also not intersectin any SpriteNode in `collidables`
+		'''
 		comet = Comet(position=outside_area.size/2, parent=parent, **kwargs)
 		
 		while (comet.frame.intersects(outside_area)) or \

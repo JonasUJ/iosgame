@@ -4,6 +4,10 @@ from ui import Image
 from utils import *
 
 class Joystick(SpriteNode):
+	'''
+	Represents the moving SpriteNode used to control the player
+	'''
+
 	def __init__(self, **kwargs):
 		SpriteNode.__init__(self, CONTROLLER_JOYSTICK_TEXTURE, **kwargs)
 		self.alpha = self.parent.alpha
@@ -12,6 +16,8 @@ class Joystick(SpriteNode):
 		self.z_position = 1.0
 		
 	def move_to(self, location, from_scene=True):
+		'''Moves self to `location` but not beyond self.parent.radius'''
+
 		self.touch_loc = self.parent.point_from_scene(location) if from_scene else location
 		distance = sqrt(self.touch_loc[0]**2 + self.touch_loc[1]**2)
 		if distance <= self.parent.radius:
@@ -22,9 +28,13 @@ class Joystick(SpriteNode):
 				sin(atan2(self.touch_loc[0], self.touch_loc[1])+pi/2) * self.parent.radius)
 			
 	def reset(self):
+		'''Returns back to (0, 0) over CONTROLLER_JOYSTICK_RESET_SPEED seconds '''
+
 		self.run_action(Action.move_to(0, 0, CONTROLLER_JOYSTICK_RESET_SPEED))
 		
 	def update_movement(self):
+		'''Updates self.movement with values determined by self.position and self.parent.radius'''
+
 		dist = sqrt(self.position[0]**2 + self.position[1]**2)
 		self.movement = (
 			(self.position[0]/self.parent.radius),
@@ -34,6 +44,14 @@ class Joystick(SpriteNode):
 			
 
 class Controller(SpriteNode):
+	'''
+	Represents the fixed SpriteNode that contains the Joystick used to control the player
+
+	Parameters:
+	----------
+	padding : int, float
+		Desired distance from the sides of the screen
+	'''
 	def __init__(self, padding, **kwargs):
 		SpriteNode.__init__(self, CONTROLLER_TEXTURE, **kwargs)
 		self.anchor_point = (.5, .5)
