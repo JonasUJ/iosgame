@@ -22,7 +22,8 @@ class Game(Scene):
 		self.pos = (.0, .0)
 		
 		self.player_sequence = Sequence(
-			[Shot(x_offset=40), Shot(x_offset=-40), Shot(y_offset=80)], 
+			[Shot(x_offset=40, y_offset=20), Shot(x_offset=-40, y_offset=20)],
+			[Shot(y_offset=80)], 
 			origin=self.player, parent=self, delay=0.1)
 
 		self.spawn_area = ShapeNode(
@@ -63,7 +64,7 @@ class Game(Scene):
 		self.move_lasers()
 		self.player.label.text = str(self.player.velocity)
 		self.player.label.rotation = 0-self.player.rotation
-		
+
 	def move_objects(self):
 		for obj in list(self.objects):
 			obj.position = (obj.pos[0] - self.player.pos[0], obj.pos[1] - self.player.pos[1])
@@ -73,7 +74,6 @@ class Game(Scene):
 					self.comets.remove(obj)
 					obj.remove_from_parent()
 				obj.pos += rotation_vector(obj.direction) * obj.speed
-				#obj.label.text = str(obj.health)
 				
 	def move_lasers(self):
 		for laser in self.lasers:
@@ -105,15 +105,18 @@ class Game(Scene):
 					comet.health -= other.mass * other.speed / 100
 					other.health -= comet.mass * comet.speed / 100
 					
-					comet.position += Vector2(newVelX1, newVelY1) 
-					comet.pos += Vector2(newVelX1, newVelY1) 
+					comet.position += Vector2(-velX1, -velY1) 
+					comet.pos += Vector2(-velX1, -velY1) 
 					comet.direction = -atan2(newVelX1, newVelY1)
 					comet.speed = abs(Vector2(newVelX1, newVelY1))
 					
-					other.position += Vector2(newVelX2, newVelY2)
-					other.pos += Vector2(newVelX2, newVelY2)
+					other.position += Vector2(-velX2, -velY2)
+					other.pos += Vector2(-velX2, -velY2)
 					other.direction = -atan2(newVelX2, newVelY2)
 					other.speed = abs(Vector2(newVelX1, newVelY1))	
+					
+					comet.check_health()
+					other.check_health()
 					
 	def check_laser_collisions(self):
 		for laser in list(self.lasers):
@@ -124,6 +127,7 @@ class Game(Scene):
 					laser.counter = 0
 					laser.z_position = comet.z_position+.1
 					comet.health -= laser.damage
+					comet.check_health()
 	
 	def touch_began(self, touch):
 		if touch.location in self.controller.frame:
