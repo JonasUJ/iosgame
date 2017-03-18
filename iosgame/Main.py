@@ -29,7 +29,7 @@ class Game(Scene):
 		self.player_sequence = Sequence(
 			[Shot(x_offset=40, y_offset=20), Shot(x_offset=-40, y_offset=20)],
 			[Shot(y_offset=80)], 
-			origin=self.player, parent=self, delay=0.1)
+			origin=self.player, delay=0.1)
 
 		self.spawn_area = ShapeNode(
 			Path.rect(*self.bounds),
@@ -41,25 +41,22 @@ class Game(Scene):
 	def update(self):
 		'''Called, preferably, 60 times a second'''
 
-		self.controller.joystick.update_movement()
-
-		# temp frame count
-		self.frameno = (self.frameno + 1) if self.frameno != 60 else 1
-		if not self.frameno % 15 and self.frameno:
-			self.player_sequence.shoot()
-			if len(self.comets) <= COMET_MAX_COMETS:
-				new_comet = Comet.spawn_in(
-					self,
-					self.spawn_area.frame, 
-					self.bounds, 
-					self.player.pos,
-					self.comets,
-					comet_size='big',
-					scale=max(1, random()*2),
-					speed=randrange(0, COMET_MAX_SPEED))
-				self.objects.append(new_comet)
-				self.comets.append(new_comet)
+		if len(self.comets) <= COMET_MAX_COMETS and round(self.t) % 0.25 == 0: 
+			new_comet = Comet.spawn_in(
+				self,
+				self.spawn_area.frame, 
+				self.bounds, 
+				self.player.pos,
+				self.comets,
+				comet_size='big',
+				scale=max(1, random()*2),
+				speed=randrange(0, COMET_MAX_SPEED))
+			self.objects.append(new_comet)
+			self.comets.append(new_comet)
 			
+		self.player_sequence.shoot()
+		
+		self.controller.joystick.update_movement()
 		joystick_vector = Vector2(*self.controller.joystick.movement[:2])
 		if self.player.velocity != joystick_vector:
 			self.player.update_vel(self.controller.joystick.movement[2]/self.controller.radius)
@@ -70,11 +67,6 @@ class Game(Scene):
 		self.check_comet_collisions()
 		self.check_laser_collisions()
 		self.move_objects()
-		self.move_lasers()
-
-		# temp debugging
-		self.player.label.text = str(self.player.velocity)
-		self.player.label.rotation = 0-self.player.rotation
 
 	def move_objects(self):
 		'''Moves every Node in self.objects to give the impression self.player moved'''
@@ -87,12 +79,6 @@ class Game(Scene):
 					self.comets.remove(obj)
 					obj.remove_from_parent()
 				obj.pos += rotation_vector(obj.direction) * obj.speed
-				
-	def move_lasers(self):
-		'''Calls laser.move() on all objects in self.lasers'''
-
-		for laser in self.lasers:
-			laser.move()
 				
 	def check_comet_collisions(self):
 		'''Checks and handles Comet to Comet collisions'''
@@ -136,9 +122,10 @@ class Game(Scene):
 					other.check_health()
 					
 	def check_laser_collisions(self):
-		'''Checks and handles Laser to Comet collisions '''
+		'''Moves, checks and handles Laser to Comet collisions '''
 
 		for laser in list(self.lasers):
+			laser.move()
 			if laser.dead:
 				continue
 			for comet in self.comets:

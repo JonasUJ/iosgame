@@ -19,7 +19,7 @@ class Laser(SpriteNode):
 		The angle, in radians, the Laser is rotated when the laser is created
 	'''
 
-	def __init__(self, origin, x_offset=0, y_offset=0, angle_offset=0, **kwargs):
+	def __init__(self, origin, x_offset=0, y_offset=0, angle_offset=0, damage=PLAYER_LASER_DAMAGE, **kwargs):
 		self.origin = origin
 		y_offset *= -1
 		SpriteNode.__init__(self, PLAYER_LASER_TEXTURE, **kwargs)
@@ -31,7 +31,7 @@ class Laser(SpriteNode):
 		self.pos = self.position + origin.pos + origin.velocity
 		self.z_position = -1
 		self.distance = self.size.h * 5
-		self.damage = PLAYER_LASER_DAMAGE
+		self.damage = damage
 		self.dead = False
 		self.velocity = rotation_vector(self.rotation)*16+origin.velocity
 		self.counter = PLAYER_LASER_TIME
@@ -65,7 +65,7 @@ class Sequence:
 	*args : list
 		Bursts of shots
 	delay : int, float
-		The time, in seconds, between a shot
+		The time, in seconds, between a burst of shot
 	origin : Node
 		The Node which shots originate from
 	'''
@@ -86,7 +86,7 @@ class Sequence:
 		if self.t + self.delay <= self.parent.t:
 
 			for shot in self.sequence[self.progress]:
-				laser = Laser(self.origin, x_offset=shot.x_offset, y_offset=shot.y_offset, angle_offset=shot.angle_offset, parent=self.parent)
+				laser = Laser(self.origin, x_offset=shot.x_offset, y_offset=shot.y_offset, angle_offset=shot.angle_offset, damage=shot.damage, parent=self.parent)
 				self.parent.objects.append(laser)
 				self.parent.lasers.append(laser)
 
@@ -105,7 +105,8 @@ class Shot:
 	angle_offset : int, float
 	'''
 
-	def __init__(self, x_offset=0, y_offset=0, angle_offset=0):
+	def __init__(self, x_offset=0, y_offset=0, angle_offset=0, damage=PLAYER_LASER_DAMAGE):
 		self.x_offset = x_offset
 		self.y_offset = y_offset
 		self.angle_offset = angle_offset
+		self.damage = damage

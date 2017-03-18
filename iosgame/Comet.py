@@ -64,11 +64,12 @@ class Comet(SpriteNode):
 		'''
 		if self.health <= 0 and self.parent:
 			new_comets = list()
-			for i in range(self.comet_size):
+			for i in range(self.comet_size if self.comet_size else 0):
 				ncomet = Comet(
 					parent=self.parent,
 					comet_size=self.comet_size-1,
-					scale=self.scale)
+					scale=self.scale,
+					speed=self.speed)
 				ncomet.pos = self.pos
 				ncomet.rotation = self.rotation+(0.5-random())
 				self.parent.objects.append(ncomet)
