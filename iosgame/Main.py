@@ -1,6 +1,6 @@
 from scene import *
 from Player import Player
-from Controller import Controller
+from Controls import Controller, FireBtn
 from Comet import Comet
 from math import pi, cos, sin, atan2
 from utils import *
@@ -19,17 +19,17 @@ class Game(Scene):
 		self.center = (self.size.w/2, self.size.h/2)
 		self.player = Player(parent=self, speed=PLAYER_SPEED)
 		self.controller = Controller(padding=40, scale=1.2, parent=self)
-		self.frameno = 1
+		self.firebtn = FireBtn(70, parent=self)
 		self.background_color = '#003f68'
 		self.objects = list()
 		self.lasers = list()
 		self.comets = list()
 		self.pos = (.0, .0)
+		self.firing = False
 		
 		self.player_sequence = Sequence(
-			[Shot(x_offset=40, y_offset=20), Shot(x_offset=-40, y_offset=20)],
-			[Shot(y_offset=80)], 
-			origin=self.player, delay=0.1)
+			[Shot(x_offset=40, y_offset=20), Shot(x_offset=-40, y_offset=20)], 
+			origin=self.player, delay=0.2)
 
 		self.spawn_area = ShapeNode(
 			Path.rect(*self.bounds),
@@ -54,7 +54,8 @@ class Game(Scene):
 			self.objects.append(new_comet)
 			self.comets.append(new_comet)
 			
-		self.player_sequence.shoot()
+		if self.firing:
+			self.player_sequence.shoot()
 		
 		self.controller.joystick.update_movement()
 		joystick_vector = Vector2(*self.controller.joystick.movement[:2])
@@ -145,6 +146,11 @@ class Game(Scene):
 			self.controller.joystick.touch_loc = self.controller.point_from_scene(touch.location)
 			self.controller.joystick.move_to(touch.location)
 		
+		elif touch.location in self.firebtn.frame:
+			self.firebtn.touch_id = touch.touch_id
+			self.firebtn.start()
+			
+		
 	def touch_moved(self, touch):
 		'''Called when a touch moved'''
 
@@ -157,6 +163,9 @@ class Game(Scene):
 		if touch.touch_id == self.controller.touch_id:
 			self.controller.joystick.reset()
 			self.controller.run_action(Action.fade_to(.4, .2))
+			
+		elif touch.touch_id ==self.firebtn.touch_id:
+			self.firebtn.stop()
 		
 		
 if __name__ == '__main__':
